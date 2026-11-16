@@ -502,7 +502,7 @@ function parseAmt(s){s=String(s==null?"":s).replace(/[$,\s]/g,"");if(s==="")retu
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 function randomSeed(){return 10000+Math.floor(Math.random()*90000);}
 
-// ---------- Chart of accounts (course chart of accounts; listed alphabetically) ----------
+// ---------- Chart of accounts (course chart of accounts; sorted by account number) ----------
 const ACCTS=[
   {id:"ap",no:2000,name:"Accounts Payable",normal:"C"},
   {id:"ar",no:1100,name:"Accounts Receivable",normal:"D"},
@@ -515,7 +515,7 @@ const ACCTS=[
   {id:"svc",no:4000,name:"Service Revenue",normal:"C"},
   {id:"util",no:6050,name:"Utilities Expense",normal:"D"}
 ];
-const ORDER=ACCTS.slice().sort((x,y)=>x.name.localeCompare(y.name));
+const ORDER=ACCTS.slice().sort((x,y)=>x.no-y.no);
 const A=Object.fromEntries(ACCTS.map(a=>[a.id,a]));
 const CUST=["Harbor Light Bakery","Elm Street Fitness","Bayview Dental Group","Crestline Landscaping","Maple Row Books","Northgate Auto Repair","Summit Event Rentals","Riverside Florist","Oak Hill Pet Care"];
 const PAYEES=[["Lakeshore Print Shop","on account","ap"],["Harborview Properties","office rent","rent"],["New Haven Gas & Electric","utilities","util"],["Coastal Office Supply","on account","ap"],["Westbrook Paper Co.","on account","ap"],["Shoreline Water","utilities","util"],["Quinnipiac Courier","on account","ap"],["Elm City Internet","utilities","util"]];
@@ -1146,7 +1146,7 @@ function radios(name,opts,val,lock,state,label,stack){
   return '<fieldset class="cg'+(state==="ok"?" grp-ok":state==="no"?" grp-no":"")+'"><legend class="sr">'+esc(label)+'</legend><div class="choices'+(stack?" stack":"")+'">'+
     opts.map(o=>'<label class="choice"><input type="radio" name="'+name+'" value="'+esc(o[0])+'"'+(val===o[0]?" checked":"")+(lock?" disabled":"")+'><span>'+esc(o[1])+'</span></label>').join("")+'</div></fieldset>';
 }
-function acctOptions(sel){return '<option value="">Choose an account…</option>'+ORDER.map(a=>'<option value="'+a.id+'"'+(sel===a.id?" selected":"")+'>'+esc(a.name)+'</option>').join("");}
+function acctOptions(sel){return '<option value="">Choose an account…</option>'+ORDER.map(a=>'<option value="'+a.id+'"'+(sel===a.id?" selected":"")+'>'+a.no+' '+esc(a.name)+'</option>').join("");}
 function controls(primary){
   let nav;
   if(graded())nav='<button class="btn small" data-act="exitGraded" title="Your graded attempt is saved to your account, and you can come back to it. The clock keeps running.">Exit to practice</button>';
